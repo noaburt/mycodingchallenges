@@ -10,4 +10,4 @@ These are found at https://codingchallenges.fyi/challenges/
 
 Each coding challenge folder has it's own Makefile and test code
 
-Simply run ```$ make``` inside the chosen folder and run ```$ ./test``` ( and / or ```$ ./main``` if solution allows for user input etc. )
+Simply run ```make``` inside the chosen folder and run ```./test``` ( and / or ```./main``` if solution allows for user input etc. )
