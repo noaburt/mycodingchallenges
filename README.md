@@ -20,4 +20,5 @@ Run ```chmod +x test.sh``` to make sure test is ready to run, then run ```./test
 Some coding challenges are basically a command line tool, this means user tests can be run too
 
 Run ```make``` and interact with ```./main``` as with any other CLI tool
+
 (run ```./main --help``` if you are unsure)
