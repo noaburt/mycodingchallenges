@@ -21,6 +21,11 @@ function runtest {
 }
 
 make
+
+if [ $? -ne 0 ]; then
+    exit 1
+fi
+
 echo "Beginning testing..."
 
 runtest "-c ChallengeFiles/test.txt" "342190 ChallengeFiles/test.txt"

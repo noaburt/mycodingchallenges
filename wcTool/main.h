@@ -12,4 +12,13 @@ This is the header file for this coding challenge
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <syslog.h>
+#include <string.h>
+
+
+/* functions */
+
+int displayresult(int count, char* filepath);
+int parsearguments(int argc, char** argv);
+
+long getbytecount(char* filepath);
+long getlinecount(char* filepath);
