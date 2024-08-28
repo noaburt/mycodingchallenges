@@ -8,17 +8,16 @@ These are found at https://codingchallenges.fyi/challenges/
 
 ## Trying for yourself
 
-Each coding challenge folder has it's own Makefile and test code, either as c or bash script
+Each coding challenge folder has it's own Makefile and automated testing script
 
-### C tests
-Simply run ```make``` and then ```./test``` to run all tests
+The automated tests are based on each coding challenge's "steps"
 
-### Bash tests
-Run ```chmod +x test.sh``` to make sure test is ready to run, then run ```./test.sh```
+### Automated tests
+Run ```chmod +x test.sh``` and then ```./test.sh``` to run the automated tests
 
 ### User tests
 Some coding challenges are basically a command line tool, this means user tests can be run too
 
-Run ```make``` and interact with ```./main``` as with any other CLI tool
+Run ```make``` in the chosen challenge folder and interact with ```./main``` as with any other CLI tool
 
 (run ```./main --help``` if you are unsure)
