@@ -13,6 +13,17 @@ This is the functions file for this coding challenge
 #include <main.h>
 
 
+void printhelp() {
+
+  /* print instructions of use for the user */
+
+  char* helpmessage =
+    "Usage: ./main [OPTION]... [FILE]...\nPrint newline, word, and byte counts for a FILE. A word is a\nnon-zero-length sequence of printable characters delimited\nby white space.\n\nThe options below may be used to select which counts are printed.\n  -c\t\t\tprint the byte count\n  -l\t\t\tprint the newline count\n  -w\t\t\tprint the word count\n\n  --help\t\tdisplay this help and exit";
+
+  fprintf(stdout, "%s\n", helpmessage);
+  
+}
+
 int displayresult(int count, char* filepath) {
 
   /* display result given to stdout */
@@ -42,7 +53,12 @@ int parsearguments(int argc, char** argv) {
 
   while ( *(argv) != NULL) {
 
+    if ( strcmp( *argv, "--help" ) == 0 ) {
+      return 0;
+    }
+
     if ( *( *(argv) ) == '-' ) {
+
       //printf("\n --- %c --- ", *(*(argv)+1) );
       char flag = *( *(argv)+1 );
 
@@ -63,7 +79,7 @@ int parsearguments(int argc, char** argv) {
     argv++;
   }
 
-  return 0;
+  return -1;
 }
 
 

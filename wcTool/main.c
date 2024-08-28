@@ -37,9 +37,14 @@ int main(int argc, char** argv) {
 
   switch(command) {
 
-  case 0:
+  case -1:
     /* Not a valid command */
     fprintf(stderr, "Error: No arguments provided\n");
+    break;
+
+  case 0:
+    /* show help */
+    printhelp();
     break;
 
   case 1:
@@ -60,8 +65,6 @@ int main(int argc, char** argv) {
     break;
     
   }
-
-  /* basic error catching for arguments */
 
   return 0;
 }

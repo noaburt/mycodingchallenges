@@ -18,6 +18,8 @@ This is the header file for this coding challenge
 
 /* functions */
 
+void printhelp();
+
 int displayresult(int count, char* filepath);
 int parsearguments(int argc, char** argv);
 
