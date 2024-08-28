@@ -3,7 +3,7 @@
 
 Coding Challenges | John Crickett
 
-Name: Noa Burt
+Author: Noa Burt
 Date: 22/08/2024
 
 This is the functions file for this coding challenge
@@ -36,6 +36,7 @@ int parsearguments(int argc, char** argv) {
     0: invalid parameters
     1: -c number of bytes
     2: -l number of lines
+    3: -w number of words
     
    */
 
@@ -43,13 +44,18 @@ int parsearguments(int argc, char** argv) {
 
     if ( *( *(argv) ) == '-' ) {
       //printf("\n --- %c --- ", *(*(argv)+1) );
+      char flag = *( *(argv)+1 );
 
-      if ( *( *(argv)+1 ) == 'c' ) {
+      if ( flag == 'c' ) {
 	return 1;
       }
 
-      if ( *( *(argv)+1 ) == 'l' ) {
+      if ( flag == 'l' ) {
 	return 2;
+      }
+
+      if ( flag == 'w' ) {
+	return 3;
       }
       
     }
@@ -117,25 +123,84 @@ long getlinecount(char* filepath) {
   return linecount;
 }
 
+long getwordcount(char* filepath) {
+
+  /* count words in file filepath and return */
+
+  FILE* fileptr;
+  long wordcount;
+
+  /* open file in normal read mode, read each line into buffer, count words, until end is reached */
+  fileptr = fopen(filepath, "r");
+
+  if ( !fileptr ) {
+    /* no file found error */
+    perror("Error opening file");
+    return -1;
+  }
+
+  char* line = malloc(256);
+  
+  while( fgets(line, 256, fileptr) ) {
+    wordcount += wordsinline(line);
+  }
+
+  free(line);    
+  fclose(fileptr);  
+
+  return wordcount;
+}
 
 
+int wordsinline(char* line) {
 
+  /* count spaces in line (including end of line) and return */
 
+  char* lineptr = line;
+  int spacecount = 0;
+  int wordlength = 0;
 
+  while (lineptr) {
 
+    if ( *lineptr == '\n' ) {
 
+      /* end of line has been reached */
 
+      if ( wordlength >= 1 ) {
+	spacecount++;
+      }
 
+      break;
+      
+    }
+    
+    if ( wordlength == 0 ) {
 
+      /* a word has not begun */
 
+      if ( isalnum( *lineptr ) ) {
+	wordlength = 1;
+      }
+      
+    } else {
 
+      /* a word has begun already */
+      wordlength++;
 
+      if ( !isalnum( *lineptr ) ) {
 
+	if (wordlength > 2) {
+	  /* word length bigger than 1 (including 1 just added above) */
+	  spacecount++;
+	}
+	wordlength = 0;
+      }
+      
+    }
 
+    lineptr++;
+    
+  }
 
-
-
-
-
-
-
+  return spacecount;
+}

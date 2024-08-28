@@ -5,7 +5,7 @@
 
 Coding Challenges | John Crickett
 
-Name: Noa Burt
+Author: Noa Burt
 Date: 22/08/2024
 
 This is the file to run all tests required of this coding challenge
@@ -30,3 +30,4 @@ echo "Beginning testing..."
 
 runtest "-c ChallengeFiles/test.txt" "342190 ChallengeFiles/test.txt"
 runtest "-l ChallengeFiles/test.txt" "7145 ChallengeFiles/test.txt"
+runtest "-w ChallengeFiles/test.txt" "58164 ChallengeFiles/test.txt"
