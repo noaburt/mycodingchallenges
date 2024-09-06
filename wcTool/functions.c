@@ -171,52 +171,42 @@ long getwordcount(char* filepath) {
 int wordsinline(char* line) {
 
   /* count spaces in line (including end of line) and return */
+  /* a word is a non-zero-length sequ. of printable chars delimited by white space */
 
   char* lineptr = line;
-  int spacecount = 0;
+  int wordcount = 0;
   int wordlength = 0;
 
   while (lineptr) {
 
     if ( *lineptr == '\n' ) {
-
-      /* end of line has been reached */
-
-      if ( wordlength >= 1 ) {
-	spacecount++;
+      /* signifies end of the line */
+      
+      if ( wordlength > 0 ) {
+	wordcount++;
       }
 
-      break;
-      
+      return wordcount;
     }
-    
-    if ( wordlength == 0 ) {
 
-      /* a word has not begun */
+    if ( isprint( *lineptr ) ) {
+      /* printable character, if it is a space, check word length */
 
-      if ( isalnum( *lineptr ) ) {
-	wordlength = 1;
+      if ( *lineptr == ' ' ) {
+	if ( wordlength > 0 ) { wordcount++; }
+      } else {
+	wordlength++;
       }
       
     } else {
-
-      /* a word has begun already */
-      wordlength++;
-
-      if ( !isalnum( *lineptr ) ) {
-
-	if (wordlength > 2) {
-	  /* word length bigger than 1 (including 1 just added above) */
-	  spacecount++;
-	}
-	wordlength = 0;
-      }
+      /* non printable, reset word length */
       
+      wordlength = 0;
     }
 
     lineptr++;
     
   }
 
-  return spacecount;
+  return -1;
 }
