@@ -39,6 +39,9 @@ typedef struct PARSEDURL {
 
 /* functions */
 
+/* help */
+void showhelp();
+
 /* url */
 parsedurl* parseURL(char* fullurl);
 int freeurl(parsedurl* parsed);

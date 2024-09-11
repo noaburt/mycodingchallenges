@@ -15,6 +15,16 @@ This is the functions file for this coding challenge
 const long D_PORT[2] = {80, 443};
 
 
+/* help */
+
+void showhelp() {
+
+  /* show usage for cccurl */
+  printf("Usage: cccurl <url>\n\nThis is a simple version of \"curl\"\nFor full curl details use \"curl --help\"\n");
+
+  exit(0);
+}
+
 /* url */
 
 parsedurl* parseURL(char* fullurl) {
