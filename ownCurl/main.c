@@ -13,7 +13,8 @@ Development Notes:
 
     - Curl clone that can connect to a server and send GET, DELETE, POST, and PUT HTTP methods
     - Refer to RFC that defines HTTP, focus on HTTP 1.1 defined in https://datatracker.ietf.org/doc/html/rfc9110
-    - 
+    - Connection will close after every HTTP request
+    - Response is assumed short, space for 4096 chars
 
 */
 
@@ -23,12 +24,13 @@ int main(int argc, char** argv) {
 
   /* good luck */
 
-  //printf("%s\n", *(argv+1) );
-  
+  /* parse url input and display request */
   parsedurl* urldetails = parseURL( *(argv+1) );
+  printf("Sending request %s", makemessage( "GET", urldetails ));
 
-  printf("connecting to %s\nSending request GET %s %s/1.1\nHost: %s\nAccept */*\n",
-	 urldetails->host, urldetails->path, urldetails->protocol ? "HTTPS" : "HTTP", urldetails->host);
+  /* send server request and collect response */
+  char* response = malloc(4096);
+  makerequest( response, makemessage( "GET", urldetails ) );
   
   return 0;
 }

@@ -21,7 +21,7 @@ This is the header file for this coding challenge
 #include <netdb.h> /* struct hostent, gethostname */
 
 
-/* structs */
+/* structs / consts */
 
 typedef struct PARSEDURL {
 
@@ -42,3 +42,7 @@ typedef struct PARSEDURL {
 /* url */
 parsedurl* parseURL(char* fullurl);
 int freeurl(parsedurl* parsed);
+
+/* request */
+char* makemessage(char* request, parsedurl* urldetails);
+int makerequest(char* responsedest, char* message);
