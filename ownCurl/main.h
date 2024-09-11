@@ -13,7 +13,11 @@ This is the header file for this coding challenge
 /* includes */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <err.h>
+#include <sys/socket.h> /* socket, connect */
+#include <netinet/in.h> /* struct sockaddr_in, struct sockaddr */
+#include <netdb.h> /* struct hostent, gethostname */
 
 
 /* structs */
@@ -35,5 +39,5 @@ typedef struct PARSEDURL {
 /* functions */
 
 parsedurl* parseURL(char* fullurl);
-void* freeurl(parsedurl* parsed);
+int freeurl(parsedurl* parsed);
 

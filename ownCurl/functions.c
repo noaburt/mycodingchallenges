@@ -23,7 +23,7 @@ parsedurl* parseURL(char* fullurl) {
     errx(1, "url pointer is NULL");
   }
 
-  parsedurl* parsed = malloc( sizeof(*parsedurl) );
+  parsedurl* parsed = malloc( sizeof( parsedurl* ) );
 
   while ( *urlptr != ':' ) {
     /* find end of protocol */
@@ -31,10 +31,11 @@ parsedurl* parseURL(char* fullurl) {
     urlptr++;
   }
 
-  switch( *(urlptr - 1) ) {
-  case 's': parsed->protocol = HTTPS;
-  case 'p': parsed->protocol = HTTP;
-  default: errx(1, "no protocol identified");
+  
+  switch( (char) *(urlptr - 1) ) {  
+  case 's': parsed->protocol = HTTPS; break;
+  case 'p': parsed->protocol = HTTP; break;
+  default: errx(1, "no protocol identified"); break;
   }
 
   /* skip :// and get host name and port */
@@ -53,16 +54,15 @@ parsedurl* parseURL(char* fullurl) {
   return parsed;
 }
 
-void* freeurl(parsedurl* parsed) {
+int freeurl(parsedurl* parsed) {
   /* free pointers stored by parsed url structure */
 
   if ( !parsed ) {
-    return;
+    return 1;
   }
 
-  free(parsed->protocol);
   free(parsed->host);
   free(parsed->path);
-  free(parsed->port);
 
+  return 0;
 }

@@ -21,8 +21,14 @@ Development Notes:
 
 int main(int argc, char** argv) {
 
-    /* good luck */
+  /* good luck */
 
-    return 0;
+  printf("%s\n", *(argv+1) );
+  
+  parsedurl* urldetails = parseURL( *(argv+1) );
+
+  printf("%d, %s, %s, %ld\n", urldetails->protocol, urldetails->host, urldetails->path, urldetails->port);
+  
+  return 0;
 }
 
