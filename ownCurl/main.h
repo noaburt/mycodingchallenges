@@ -15,6 +15,7 @@ This is the header file for this coding challenge
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <err.h>
 #include <sys/socket.h> /* socket, connect */
 #include <netinet/in.h> /* struct sockaddr_in, struct sockaddr */
@@ -48,4 +49,4 @@ int freeurl(parsedurl* parsed);
 
 /* request */
 char* makemessage(char* request, parsedurl* urldetails);
-int makerequest(char* responsedest, char* message);
+char* makerequest(parsedurl* urldetails);

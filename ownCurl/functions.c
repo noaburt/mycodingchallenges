@@ -148,11 +148,88 @@ char* makemessage(char* request, parsedurl* urldetails) {
   return message;
 }
 
-int makerequest(char* responsedest, char* message) {
+char* makerequest(parsedurl* urldetails) {
 
-  /* make http(s) message request and store response in responsedest */
+  /* make http(s) message, request and store response */
 
+  /* create message for request, and malloc response */
+  char* message = makemessage( "GET", urldetails );
+  char response[4096];
+
+  /* variables from sys/socket.h, netinet/in.h, and netdb.h */
+  struct hostent* server;
+  struct sockaddr_in serveraddr;
+
+  /* create the socket */
+  int sockres = socket(AF_INET, SOCK_STREAM, 0);
+  if (sockres < 0) {
+    errx(1, "error opening socket");
+  }
+
+  /* find server */
+  server = gethostbyname( urldetails->host );
+  if (server == NULL) {
+    errx(1, "no such host");
+  }
+
+  /* store data in struct */
+  memset( &serveraddr, 0, sizeof(serveraddr) );
+  serveraddr.sin_family = AF_INET;
+  serveraddr.sin_port = htons( urldetails->port );
+  memcpy( &serveraddr.sin_addr.s_addr, server->h_addr, server->h_length );
+
+  /* connect the socket */
+  if ( connect(sockres, (struct sockaddr*) &serveraddr, sizeof( serveraddr ) ) < 0 ) {
+    errx(1, "error connecting socket");
+  }
   
+  /* send request message */
+  int total = strlen(message);
+  int sent = 0;
+  int bytes;
+  
+  while (sent <= total) {
+      bytes = write(sockres, message+sent, total-sent);
 
-  return 0;
+      if (bytes < 0) {
+	errx(1, "error sending request");
+      }
+      
+      if (bytes == 0) {
+	break;
+      }
+      
+      sent+=bytes;
+  }
+
+  /* receive response */
+  memset( response, 0, sizeof(response) );
+  total = sizeof( response ) - 1;
+  int received = 0;
+  
+  while (received <= total) {
+      bytes = read(sockres, response+received, total-received);
+      if (bytes < 0) {
+	errx(1, "error reading response");
+      }
+      
+      if (bytes == 0) {
+	break;
+      }
+      
+      received+=bytes;
+  }
+
+  /* check if response string is full*/
+  if (received == total) {
+    errx(1, "couldn't store socket response");
+  }
+
+  /* close the socket */
+  close(sockres);
+  free(message);
+
+  char* responseptr = response;
+  return responseptr;
+
 }

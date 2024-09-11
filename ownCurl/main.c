@@ -33,10 +33,9 @@ int main(int argc, char** argv) {
   printf("Sending request %s", makemessage( "GET", urldetails ));
 
   /* send server request and collect response */
-  char* response = malloc(4096);
-  makerequest( response, makemessage( "GET", urldetails ) );
+  char* response = makerequest( urldetails );
 
-  
+  printf("%s\n", response);  
   
   return 0;
 }
