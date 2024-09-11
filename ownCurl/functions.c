@@ -43,28 +43,45 @@ parsedurl* parseURL(char* fullurl) {
 
   /* read host until '/' is reached, store host */
   parsed->host = malloc( sizeof( char* ) );
-
-  char* readptr = parsed->host;
-  char* portptr = "80";
+  
+  char* hostptr = parsed->host;
+  
+  char* portstr = malloc( sizeof( char* ) );
+  char* portptr = portstr;
+  
+  int storeto = 0; /* 0 - reading host, 1 - reading port*/
   
   while ( *urlptr != '/' ) {
 
     if ( *urlptr == ':') {
-      /* finish reading host, store, and begin reading port */
-      *readptr = '\0';
-      readptr = portptr;
+      *hostptr = '\0';
+      storeto = 1;
+      urlptr++;
+    }
+
+    if ( storeto == 0 ) {
+      *hostptr = *urlptr;
+      hostptr++;
     } else {
-      /* otherwise store current char to readptr*/
-      *readptr = *urlptr;
-      readptr++;
+      *portptr = *urlptr;
+      portptr++;
     }
     
     urlptr++;
     
   }
 
-  *readptr = '\0';
-  parsed->port = strtol( portptr, '\0', 10 );
+  *portptr = '\0';
+
+  /* convert port to long and store */
+  /* if port is not specified, default to 80 */
+  
+  if ( *portstr == '\0' ) {
+    parsed->port = 80;
+  } else {
+    parsed->port = strtol( portstr, '\0', 10 );
+  }
+  
   
   /* store the rest of the url as path*/
   parsed->path = malloc( sizeof( char* ) );
