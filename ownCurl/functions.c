@@ -138,7 +138,7 @@ char* makemessage(char* request, parsedurl* urldetails) {
   return message;
 }
 
-char* makerequest(char* responsedest, char* message) {
+int makerequest(char* responsedest, char* message) {
 
   /* make http(s) message request and store response in responsedest */
 
