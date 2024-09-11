@@ -17,12 +17,20 @@ This is the header file for this coding challenge
 #include <string.h>
 #include <unistd.h>
 #include <err.h>
-#include <sys/socket.h> /* socket, connect */
-#include <netinet/in.h> /* struct sockaddr_in, struct sockaddr */
-#include <netdb.h> /* struct hostent, gethostname */
+#include <sys/socket.h> /* for: socket, connect */
+#include <netinet/in.h> /* for: struct sockaddr_in, struct sockaddr */
+#include <netdb.h> /* for: struct hostent, gethostname */
 
 
-/* structs / consts */
+/* structs */
+
+typedef struct FLAGS {
+
+  /* struct to store flags enabled / disabled */
+
+  int help;
+  int verbose;
+} flags;
 
 typedef struct PARSEDURL {
 
@@ -40,7 +48,8 @@ typedef struct PARSEDURL {
 
 /* functions */
 
-/* help */
+/* flags & args */
+flags* parseargs(int argc, char** argv, char* urldest);
 void showhelp();
 
 /* url */

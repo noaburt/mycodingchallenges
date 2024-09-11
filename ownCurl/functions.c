@@ -15,14 +15,46 @@ This is the functions file for this coding challenge
 const long D_PORT[2] = {80, 443};
 
 
-/* help */
+/* flags & args */
+
+flags* parseargs(int argc, char** argv, char* urldest) {
+
+  /* parse arguments into flags */
+
+  flags* argflags = malloc( sizeof( flags* ) );
+  int index = 1;
+
+  while ( *(argv+index) ) {
+
+    /* if first char is '-' check for flags, else store url */
+    if ( **(argv+index) == '-' ) {
+      
+      if ( strcmp( *(argv+index), "--help" ) == 0 ) {
+	argflags->help = 1;
+      } else if ( strcmp( *(argv+index), "-v" ) == 0 || strcmp( *(argv+index), "--verbose" ) == 0 ) {
+	argflags->verbose = 1;
+      } else {
+	errx(1, "unknown argument %s", *(argv+index));
+      }
+      
+    } else {
+      urldest = *(argv+index);
+    }
+
+    index++;
+  }
+
+  return argflags;
+}
 
 void showhelp() {
 
   /* show usage for cccurl */
-  printf("Usage: cccurl <url>\n\nThis is a simple version of \"curl\"\nFor full curl details use \"curl --help\"\n");
+  printf("Usage: cccurl [options...] <url>\n");
+  printf(" -v, --vebose\t\tMake the operation more talkative\n");
+  printf("\nThis is a simple version of \"curl\"\n");
+  printf("For full curl details use \"curl --help\"\n");
 
-  exit(0);
 }
 
 /* url */

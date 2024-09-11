@@ -25,11 +25,16 @@ int main(int argc, char** argv) {
   /* good luck */
 
   /* argument validation */
-  if ( argc > 2 ) { errx(1, "too many arguments"); }
-  if ( strcmp( *(argv+1), "--help" ) == 0 ) { showhelp(); }
+  char* argurl = malloc( sizeof( char* ) );
+  flags* argflags = parseargs(argc, argv, argurl);  
+
+  if (argflags->help == 1) {
+    showhelp();
+    return 0;
+  }
   
   /* parse url input and display request */
-  parsedurl* urldetails = parseURL( *(argv+1) );
+  parsedurl* urldetails = parseURL( argurl );
   printf("Sending request %s", makemessage( "GET", urldetails ));
 
   /* send server request and collect response */
