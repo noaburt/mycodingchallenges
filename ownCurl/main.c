@@ -23,11 +23,12 @@ int main(int argc, char** argv) {
 
   /* good luck */
 
-  printf("%s\n", *(argv+1) );
+  //printf("%s\n", *(argv+1) );
   
   parsedurl* urldetails = parseURL( *(argv+1) );
 
-  printf("%d, %s, %s, %ld\n", urldetails->protocol, urldetails->host, urldetails->path, urldetails->port);
+  printf("connecting to %s\nSending request GET %s %s/1.1\nHost: %s\nAccept */*\n",
+	 urldetails->host, urldetails->path, urldetails->protocol ? "HTTPS" : "HTTP", urldetails->host);
   
   return 0;
 }

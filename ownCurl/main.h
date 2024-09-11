@@ -14,6 +14,7 @@ This is the header file for this coding challenge
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <err.h>
 #include <sys/socket.h> /* socket, connect */
 #include <netinet/in.h> /* struct sockaddr_in, struct sockaddr */
@@ -38,6 +39,6 @@ typedef struct PARSEDURL {
 
 /* functions */
 
+/* url */
 parsedurl* parseURL(char* fullurl);
 int freeurl(parsedurl* parsed);
-
