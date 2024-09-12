@@ -48,10 +48,15 @@ int main(int argc, char** argv) {
 
   /* send server request and collect response */
   char* response = makerequest( urldetails );
+  char* headers = splitheader( response );
+
+  printf("%s\n", headers);
 
   if ( argflags->verbose ) {
     showmsg( '<', response );
   }
+
+  freeurl(urldetails);
   
   return 0;
 }

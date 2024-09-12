@@ -209,7 +209,7 @@ char* makerequest(parsedurl* urldetails) {
   /* make http(s) message, request and store response */
 
   /* create message for request, and malloc response */
-    char* message = makemessage( "GET", urldetails );
+  char* message = makemessage( "GET", urldetails );
   char response[4096];
 
   /* variables from sys/socket.h, netinet/in.h, and netdb.h */
@@ -287,5 +287,30 @@ char* makerequest(parsedurl* urldetails) {
 
   char* responseptr = response;
   return responseptr;
+}
 
+char* splitheader(char* response) {
+
+  /* return the headers separated from reponse */
+
+  char header[4096];
+  char* headptr = header;
+  char* responseptr = response;
+
+  /* find start of header, terminate response, and store rest in header */
+  while( *responseptr != '{' ) { responseptr++; }
+  *headptr = '{';
+  //*responseptr = '\0';
+
+  while( *(responseptr+1) != '\0' ) {
+    responseptr++;
+    headptr++;
+    
+    *headptr = *responseptr;
+  }
+
+  *(headptr+1) = '\0';
+
+  headptr = header;
+  return headptr;
 }
