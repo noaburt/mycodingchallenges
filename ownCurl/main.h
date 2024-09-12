@@ -30,6 +30,10 @@ typedef struct FLAGS {
 
   int help;
   int verbose;
+  int method;
+
+  /* string to store method to send */
+  char* methodstr;
   
 } flags;
 
@@ -60,4 +64,4 @@ int freeurl(parsedurl* parsed);
 /* request */
 int showmsg(char direction, char* message);
 char* makemessage(char* request, parsedurl* urldetails);
-char* makerequest(parsedurl* urldetails);
+char* makerequest(char* method, parsedurl* urldetails);

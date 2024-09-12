@@ -16,7 +16,9 @@ function runtest {
 
     # Simple function to format tests; arg 1 is test arguments, arg 2 is expected result, arg 3 is show tests [0 - no, 1 - yes]
 
-    printf "\n> ./cccurl %-50s | expecting: %40s" "$1" "$2"
+    printf "\n ./cccurl %-50s | expecting: %40s\n" "$1" "$2"
+    printf "I========================================================"
+    printf "=========================================================I\n"
     printf "$(./cccurl $1)\n"
 }
 
@@ -28,4 +30,6 @@ fi
 
 echo "Beginning testing..."
 
-runtest "cccurl http://eu.httpbin.org/get" "Host: eu.httpbin.org, Accept: */*" 0
+runtest "http://eu.httpbin.org/get" "Header contents only" 0
+runtest "-v http://eu.httpbin.org/get" "Connection & header contents" 0
+runtest "-X DELETE http://eu.httpbin.org/delete" "args, data, etc should be empty" 0

@@ -33,12 +33,15 @@ int parseargs(int argc, char** argv, flags* argflags) {
 	argflags->help = 1;
       } else if ( strcmp( *(argv+index), "-v" ) == 0 || strcmp( *(argv+index), "--verbose" ) == 0 ) {
 	argflags->verbose = 1;
+      } else if ( strcmp( *(argv+index), "-X" ) == 0 || strcmp( *(argv+index), "--request" ) == 0 ) {
+	argflags->method = 1;
+	argflags->methodstr = *(argv+index+1);
+	index++;
       } else {
 	errx(1, "unknown argument %s", *(argv+index));
       }
       
     } else {
-      //printf("found %s at %d\n", *(argv+index), index);
       found = index;
     }
 
@@ -53,6 +56,7 @@ char* gethelp() {
   /* show usage for cccurl */
   char* help = "Usage: cccurl [options...] <url>\n"
   " -v, --vebose\t\tMake the operation more talkative\n"
+    " -X, --request <method>\tSpecify request method to use\n"
   "\nThis is a simple version of \"curl\"\n"
   "For full curl details use \"curl --help\"";
 
@@ -184,12 +188,12 @@ char* makemessage(char* request, parsedurl* urldetails) {
   return message;
 }
 
-char* makerequest(parsedurl* urldetails) {
+char* makerequest(char* method, parsedurl* urldetails) {
 
   /* make http(s) message, request and store response */
 
   /* create message for request, and malloc response */
-  char* message = makemessage( "GET", urldetails );
+  char* message = makemessage( method, urldetails );
   char response[4096];
 
   /* variables from sys/socket.h, netinet/in.h, and netdb.h */
