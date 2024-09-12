@@ -166,26 +166,6 @@ int freeurl(parsedurl* parsed) {
 
 /* request */
 
-int showmsg(char direction, char* message) {
-
-  /* print the message when sent / received */
-
-  char* msgptr = message;
-
-  printf("%c ", direction);
-  while( *msgptr != '\0' ) {
-    printf("%c", *msgptr);
-
-    if ( *msgptr == '\n' && *(msgptr+1) != '\0' ) {
-      printf("%c ", direction);
-    }
-      
-    msgptr++;
-  }
-
-  return 0;
-}
-
 char* makemessage(char* request, parsedurl* urldetails) {
 
   /* return a request message based on parsed url */
@@ -287,30 +267,4 @@ char* makerequest(parsedurl* urldetails) {
 
   char* responseptr = response;
   return responseptr;
-}
-
-char* splitheader(char* response) {
-
-  /* return the headers separated from reponse */
-
-  char header[4096];
-  char* headptr = header;
-  char* responseptr = response;
-
-  /* find start of header, terminate response, and store rest in header */
-  while( *responseptr != '{' ) { responseptr++; }
-  *headptr = '{';
-  //*responseptr = '\0';
-
-  while( *(responseptr+1) != '\0' ) {
-    responseptr++;
-    headptr++;
-    
-    *headptr = *responseptr;
-  }
-
-  *(headptr+1) = '\0';
-
-  headptr = header;
-  return headptr;
 }

@@ -61,4 +61,3 @@ int freeurl(parsedurl* parsed);
 int showmsg(char direction, char* message);
 char* makemessage(char* request, parsedurl* urldetails);
 char* makerequest(parsedurl* urldetails);
-char* splitheader(char* reponse);

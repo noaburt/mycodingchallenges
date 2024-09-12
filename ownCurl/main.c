@@ -43,17 +43,46 @@ int main(int argc, char** argv) {
   parsedurl* urldetails = parseURL( argv[urlindex] );
   
   if ( argflags->verbose ) {
-    showmsg( '>', makemessage("GET", urldetails) );
+    char* message = makemessage("GET", urldetails);
+    char* msgptr = message;
+    printf("> ");
+    
+    while( *msgptr != '\0' ) {
+      printf("%c", *msgptr);
+
+      if ( *msgptr == '\n' && *(msgptr+1) != '\0' ) {
+	printf("> ");
+      }
+      
+      msgptr++;
+    }
+
   }
 
   /* send server request and collect response */
   char* response = makerequest( urldetails );
-  char* headers = splitheader( response );
 
-  printf("%s\n", headers);
+  /* show response, only display headers unless verbose */
+  int headerstarted = 0;
+  char* responseptr = response;
 
-  if ( argflags->verbose ) {
-    showmsg( '<', response );
+  if ( argflags->verbose ) { printf("< "); }
+
+  while( *responseptr != '\0' ) {
+
+    if ( *responseptr == '{' ) { headerstarted = 1; }
+    
+    if ( headerstarted || argflags->verbose ) {
+      printf("%c", *responseptr);
+
+      if ( headerstarted == 0 ) {
+	if ( *responseptr == '\n' && *(responseptr+1) != '{') {
+	  printf("< ");
+	}
+      }
+    }
+      
+    responseptr++;
   }
 
   freeurl(urldetails);
