@@ -25,22 +25,33 @@ int main(int argc, char** argv) {
   /* good luck */
 
   /* argument validation */
-  char* argurl = malloc( sizeof( char* ) );
-  flags* argflags = parseargs(argc, argv, argurl);  
+  int urlindex = 0;
+  flags* argflags = malloc( sizeof( flags* ) );
+  
+  urlindex = parseargs(argc, argv, argflags);
 
-  if (argflags->help == 1) {
-    showhelp();
+  if ( argflags->help ) {
+    printf("%s\n", gethelp());
     return 0;
   }
+
+  if ( urlindex < 1 ) {
+    errx(1, "no url provided");
+  }
   
-  /* parse url input and display request */
-  parsedurl* urldetails = parseURL( argurl );
-  printf("Sending request %s", makemessage( "GET", urldetails ));
+  /* parse url input and display request if verbose */
+  parsedurl* urldetails = parseURL( argv[urlindex] );
+  
+  if ( argflags->verbose ) {
+    showmsg( '>', makemessage("GET", urldetails) );
+  }
 
   /* send server request and collect response */
   char* response = makerequest( urldetails );
 
-  printf("%s\n", response);  
+  if ( argflags->verbose ) {
+    showmsg( '<', response );
+  }
   
   return 0;
 }

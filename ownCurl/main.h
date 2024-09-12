@@ -30,6 +30,7 @@ typedef struct FLAGS {
 
   int help;
   int verbose;
+  
 } flags;
 
 typedef struct PARSEDURL {
@@ -49,13 +50,14 @@ typedef struct PARSEDURL {
 /* functions */
 
 /* flags & args */
-flags* parseargs(int argc, char** argv, char* urldest);
-void showhelp();
+int parseargs(int argc, char** argv, flags* argflags);
+char* gethelp();
 
 /* url */
 parsedurl* parseURL(char* fullurl);
 int freeurl(parsedurl* parsed);
 
 /* request */
+int showmsg(char direction, char* message);
 char* makemessage(char* request, parsedurl* urldetails);
 char* makerequest(parsedurl* urldetails);

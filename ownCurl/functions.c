@@ -17,14 +17,14 @@ const long D_PORT[2] = {80, 443};
 
 /* flags & args */
 
-flags* parseargs(int argc, char** argv, char* urldest) {
+int parseargs(int argc, char** argv, flags* argflags) {
 
-  /* parse arguments into flags */
-
-  flags* argflags = malloc( sizeof( flags* ) );
+  /* parse arguments into flag structure (already allocated space) */
+  
+  int found = 0;
   int index = 1;
 
-  while ( *(argv+index) ) {
+  while ( index < argc ) {
 
     /* if first char is '-' check for flags, else store url */
     if ( **(argv+index) == '-' ) {
@@ -38,24 +38,28 @@ flags* parseargs(int argc, char** argv, char* urldest) {
       }
       
     } else {
-      urldest = *(argv+index);
+      //printf("found %s at %d\n", *(argv+index), index);
+      found = index;
     }
 
     index++;
   }
 
-  return argflags;
+  return found;
 }
 
-void showhelp() {
+char* gethelp() {
 
   /* show usage for cccurl */
-  printf("Usage: cccurl [options...] <url>\n");
-  printf(" -v, --vebose\t\tMake the operation more talkative\n");
-  printf("\nThis is a simple version of \"curl\"\n");
-  printf("For full curl details use \"curl --help\"\n");
+  char* help = "Usage: cccurl [options...] <url>\n"
+  " -v, --vebose\t\tMake the operation more talkative\n"
+  "\nThis is a simple version of \"curl\"\n"
+  "For full curl details use \"curl --help\"";
+
+  return help;
 
 }
+
 
 /* url */
 
@@ -162,6 +166,26 @@ int freeurl(parsedurl* parsed) {
 
 /* request */
 
+int showmsg(char direction, char* message) {
+
+  /* print the message when sent / received */
+
+  char* msgptr = message;
+
+  printf("%c ", direction);
+  while( *msgptr != '\0' ) {
+    printf("%c", *msgptr);
+
+    if ( *msgptr == '\n' && *(msgptr+1) != '\0' ) {
+      printf("%c ", direction);
+    }
+      
+    msgptr++;
+  }
+
+  return 0;
+}
+
 char* makemessage(char* request, parsedurl* urldetails) {
 
   /* return a request message based on parsed url */
@@ -185,7 +209,7 @@ char* makerequest(parsedurl* urldetails) {
   /* make http(s) message, request and store response */
 
   /* create message for request, and malloc response */
-  char* message = makemessage( "GET", urldetails );
+    char* message = makemessage( "GET", urldetails );
   char response[4096];
 
   /* variables from sys/socket.h, netinet/in.h, and netdb.h */
