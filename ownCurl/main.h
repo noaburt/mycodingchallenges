@@ -31,9 +31,13 @@ typedef struct FLAGS {
   int help;
   int verbose;
   int method;
+  int data;
+  int customh;
 
-  /* string to store method to send */
+  /* string to store extra data for methods */
   char* methodstr;
+  char* datastr;
+  char* customhstr;
   
 } flags;
 
@@ -63,5 +67,5 @@ int freeurl(parsedurl* parsed);
 
 /* request */
 int showmsg(char direction, char* message);
-char* makemessage(char* request, parsedurl* urldetails);
-char* makerequest(char* method, parsedurl* urldetails);
+char* makemessage(char* request, parsedurl* urldetails, char* postheader);
+char* makerequest(parsedurl* urldetails, flags* argflags);

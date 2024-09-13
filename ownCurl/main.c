@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
   parsedurl* urldetails = parseURL( argv[urlindex] );
   
   if ( argflags->verbose ) {
-    char* message = makemessage( argflags->methodstr, urldetails);
+    char* message = makemessage( argflags->methodstr, urldetails, argflags->customhstr);
     char* msgptr = message;
     printf("> ");
     
@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
   }
 
   /* send server request and collect response */
-  char* response = makerequest( argflags->methodstr, urldetails );
+  char* response = makerequest( urldetails, argflags );
 
   /* show response, only display headers unless verbose */
   int headerstarted = 0;

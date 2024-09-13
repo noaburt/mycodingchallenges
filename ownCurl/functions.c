@@ -29,13 +29,21 @@ int parseargs(int argc, char** argv, flags* argflags) {
     /* if first char is '-' check for flags, else store url */
     if ( **(argv+index) == '-' ) {
       
-      if ( strcmp( *(argv+index), "--help" ) == 0 ) {
+      if ( strcmp( *(argv+index), "-h" ) == 0 || strcmp( *(argv+index), "--help" ) == 0 ) {
 	argflags->help = 1;
       } else if ( strcmp( *(argv+index), "-v" ) == 0 || strcmp( *(argv+index), "--verbose" ) == 0 ) {
 	argflags->verbose = 1;
       } else if ( strcmp( *(argv+index), "-X" ) == 0 || strcmp( *(argv+index), "--request" ) == 0 ) {
 	argflags->method = 1;
 	argflags->methodstr = *(argv+index+1);
+	index++;
+      } else if ( strcmp( *(argv+index), "-d" ) == 0 || strcmp( *(argv+index), "--data" ) == 0 ) {
+	argflags->data = 1;
+	argflags->datastr = *(argv+index+1);
+	index++;
+      } else if ( strcmp( *(argv+index), "-H" ) == 0 || strcmp( *(argv+index), "--header" ) == 0 ) {
+	argflags->customh = 1;
+	argflags->customhstr = *(argv+index+1);
 	index++;
       } else {
 	errx(1, "unknown argument %s", *(argv+index));
@@ -55,8 +63,10 @@ char* gethelp() {
 
   /* show usage for cccurl */
   char* help = "Usage: cccurl [options...] <url>\n"
-  " -v, --vebose\t\tMake the operation more talkative\n"
-    " -X, --request <method>\tSpecify request method to use\n"
+  " -v, --vebose\t\t\tMake the operation more talkative\n"
+  " -X, --request <method>\t\tSpecify request method to use\n"
+  " -d, --data <data>\t\tHTTP POST data (string)\n"
+  " -H, --header <header/@file>\tPass custom header to server\n"
   "\nThis is a simple version of \"curl\"\n"
   "For full curl details use \"curl --help\"";
 
@@ -170,30 +180,38 @@ int freeurl(parsedurl* parsed) {
 
 /* request */
 
-char* makemessage(char* request, parsedurl* urldetails) {
+char* makemessage(char* request, parsedurl* urldetails, char* postheader) {
 
   /* return a request message based on parsed url */
 
   char* message = malloc(1024);
+  char* addheader = "%s\r\n";
+
+  if ( postheader != NULL ) {
+    sprintf(addheader, postheader);
+  } else {
+    addheader = "";
+  }
   
-  char* msgformat = "%s %s %s/1.1\r\nHost: %s\r\nAccept: */*\r\nConnection: close\r\n\r\n";
+  char* msgformat = "%s %s %s/1.1\r\nHost: %s\r\nAccept: */*\r\n%sConnection: close\r\n\r\n";
 
   sprintf(message, msgformat,
 	  request,
 	  urldetails->path,
 	  urldetails->protocol ? "HTTPS" : "HTTP",
-	  urldetails->host
+	  urldetails->host,
+	  addheader
 	  );
 
   return message;
 }
 
-char* makerequest(char* method, parsedurl* urldetails) {
+char* makerequest(parsedurl* urldetails, flags* argflags) {
 
   /* make http(s) message, request and store response */
 
   /* create message for request, and malloc response */
-  char* message = makemessage( method, urldetails );
+  char* message = makemessage( argflags->methodstr, urldetails, argflags->customhstr );
   char response[4096];
 
   /* variables from sys/socket.h, netinet/in.h, and netdb.h */
