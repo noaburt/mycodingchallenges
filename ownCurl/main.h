@@ -60,6 +60,8 @@ typedef struct PARSEDURL {
 /* flags & args */
 int parseargs(int argc, char** argv, flags* argflags);
 char* gethelp();
+int resetflags(flags* argflags);
+int freeflags(flags* argflags);
 
 /* url */
 parsedurl* parseURL(char* fullurl);
@@ -68,4 +70,4 @@ int freeurl(parsedurl* parsed);
 /* request */
 int showmsg(char direction, char* message);
 char* makemessage(char* request, parsedurl* urldetails, char* postheader);
-char* makerequest(parsedurl* urldetails, flags* argflags);
+char* makerequest(parsedurl* urldetails, flags* argflags, char* message);

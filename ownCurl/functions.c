@@ -20,6 +20,8 @@ const long D_PORT[2] = {80, 443};
 int parseargs(int argc, char** argv, flags* argflags) {
 
   /* parse arguments into flag structure (already allocated space) */
+
+  resetflags(argflags);
   
   int found = 0;
   int index = 1;
@@ -72,6 +74,38 @@ char* gethelp() {
 
   return help;
 
+}
+
+int resetflags(flags* argflags) {
+
+  /* initialise argflags and reset values */
+
+  argflags->help = 0;
+  argflags->verbose = 0;
+  argflags->method = 0;
+  argflags->data = 0;
+  argflags->customh = 0;
+  
+  argflags->methodstr = malloc( sizeof( char* ) );
+  argflags->methodstr = '\0';
+  argflags->datastr = malloc( sizeof( char* ) );
+  argflags->datastr = '\0';
+  argflags->customhstr = malloc( sizeof( char* ) );
+  argflags->customhstr = '\0';
+
+  return 0;
+}
+
+int freeflags(flags* argflags) {
+
+  /* free space allocated from argflags */
+
+  free(argflags->methodstr);
+  free(argflags->datastr);
+  free(argflags->customhstr);
+  free(argflags);
+
+  return 0;
 }
 
 
@@ -184,34 +218,46 @@ char* makemessage(char* request, parsedurl* urldetails, char* postheader) {
 
   /* return a request message based on parsed url */
 
-  char* message = malloc(1024);
-  char* addheader = "%s\r\n";
+  char* thisrequest = malloc( sizeof( char* ) );
+  char* thisheader = malloc( sizeof( char* ) );
 
-  if ( postheader != NULL ) {
-    sprintf(addheader, postheader);
+  /* detault method is GET */
+  if ( request == NULL ) {
+    strcpy(thisrequest, "GET");
   } else {
-    addheader = "";
+    strcpy(thisrequest, request);
   }
-  
-  char* msgformat = "%s %s %s/1.1\r\nHost: %s\r\nAccept: */*\r\n%sConnection: close\r\n\r\n";
 
+  /* add extra headers if present */
+  if ( postheader == NULL ) {
+    strcpy(thisheader, "\r\n");
+  } else {
+    strcpy(thisheader, postheader);
+  }
+
+  char msgformat[1024] = "%s %s %s/1.1\r\nHost: %s\r\nAccept: */*%sConnection: close\r\n\r\n";
+  char message[1024];
+  
   sprintf(message, msgformat,
-	  request,
+	  thisrequest,
 	  urldetails->path,
 	  urldetails->protocol ? "HTTPS" : "HTTP",
 	  urldetails->host,
-	  addheader
+	  thisheader
 	  );
 
-  return message;
+  free(thisrequest);
+  free(thisheader);
+
+  char* msgptr = message;
+  return msgptr;
 }
 
-char* makerequest(parsedurl* urldetails, flags* argflags) {
+char* makerequest(parsedurl* urldetails, flags* argflags, char* message) {
 
   /* make http(s) message, request and store response */
 
   /* create message for request, and malloc response */
-  char* message = makemessage( argflags->methodstr, urldetails, argflags->customhstr );
   char response[4096];
 
   /* variables from sys/socket.h, netinet/in.h, and netdb.h */
@@ -278,6 +324,8 @@ char* makerequest(parsedurl* urldetails, flags* argflags) {
       received+=bytes;
   }
 
+  //free(message);
+
   /* check if response string is full*/
   if (received == total) {
     errx(1, "couldn't store socket response");
@@ -285,7 +333,6 @@ char* makerequest(parsedurl* urldetails, flags* argflags) {
 
   /* close the socket */
   close(sockres);
-  free(message);
 
   char* responseptr = response;
   return responseptr;

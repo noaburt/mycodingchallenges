@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
   flags* argflags = malloc( sizeof( flags* ) );
   
   urlindex = parseargs(argc, argv, argflags);
-
+  
   if ( argflags->help ) {
     printf("%s\n", gethelp());
     return 0;
@@ -38,15 +38,12 @@ int main(int argc, char** argv) {
   if ( urlindex < 1 ) {
     errx(1, "no url provided");
   }
-
-  /* detault method is GET */
-  if ( argflags->methodstr == NULL ) { argflags->methodstr = "GET"; }
   
-  /* parse url input and display request if verbose */
+  /* parse url input and display request message if verbose */
   parsedurl* urldetails = parseURL( argv[urlindex] );
+  char* message = makemessage( argflags->methodstr, urldetails, argflags->customhstr);
   
   if ( argflags->verbose ) {
-    char* message = makemessage( argflags->methodstr, urldetails, argflags->customhstr);
     char* msgptr = message;
     printf("> ");
     
@@ -63,7 +60,7 @@ int main(int argc, char** argv) {
   }
 
   /* send server request and collect response */
-  char* response = makerequest( urldetails, argflags );
+  char* response = makerequest( urldetails, argflags, message );
 
   /* show response, only display headers unless verbose */
   int headerstarted = 0;
@@ -88,7 +85,8 @@ int main(int argc, char** argv) {
     responseptr++;
   }
 
-  freeurl(urldetails);
+  //freeurl(urldetails);
+  //freeflags(argflags);
   
   return 0;
 }
