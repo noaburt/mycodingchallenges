@@ -10,7 +10,7 @@ This is the header file for this coding challenge
 
 */
 
-/* includes */
+/* includes & defines */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,6 +21,8 @@ This is the header file for this coding challenge
 #include <netinet/in.h> /* for: struct sockaddr_in, struct sockaddr */
 #include <netdb.h> /* for: struct hostent, gethostname */
 
+static size_t RESPONSE_SIZE = 4096;
+static size_t MESSAGE_SIZE = 1024;
 
 /* structs */
 
@@ -69,5 +71,5 @@ int freeurl(parsedurl* parsed);
 
 /* request */
 int showmsg(char direction, char* message);
-char* makemessage(char* request, parsedurl* urldetails, char* postheader);
-char* makerequest(parsedurl* urldetails, flags* argflags, char* message);
+int makemessage(char* message, char* request, parsedurl* urldetails, char* postheader);
+int makerequest(char* responsedest, parsedurl* urldetails, flags* argflags, char* message);

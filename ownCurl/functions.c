@@ -214,12 +214,12 @@ int freeurl(parsedurl* parsed) {
 
 /* request */
 
-char* makemessage(char* request, parsedurl* urldetails, char* postheader) {
+int makemessage(char* message, char* request, parsedurl* urldetails, char* postheader) {
 
   /* return a request message based on parsed url */
 
-  char* thisrequest = malloc( sizeof( char* ) );
-  char* thisheader = malloc( sizeof( char* ) );
+  char thisrequest[64];
+  char thisheader[64];
 
   /* detault method is GET */
   if ( request == NULL ) {
@@ -235,8 +235,7 @@ char* makemessage(char* request, parsedurl* urldetails, char* postheader) {
     strcpy(thisheader, postheader);
   }
 
-  char msgformat[1024] = "%s %s %s/1.1\r\nHost: %s\r\nAccept: */*%sConnection: close\r\n\r\n";
-  char message[1024];
+  char msgformat[128] = "%s %s %s/1.1\r\nHost: %s\r\nAccept: */*%sConnection: close\r\n\r\n";
   
   sprintf(message, msgformat,
 	  thisrequest,
@@ -245,20 +244,13 @@ char* makemessage(char* request, parsedurl* urldetails, char* postheader) {
 	  urldetails->host,
 	  thisheader
 	  );
-
-  free(thisrequest);
-  free(thisheader);
-
-  char* msgptr = message;
-  return msgptr;
+  
+  return 0;
 }
 
-char* makerequest(parsedurl* urldetails, flags* argflags, char* message) {
+int makerequest(char* responsedest, parsedurl* urldetails, flags* argflags, char* message) {
 
-  /* make http(s) message, request and store response */
-
-  /* create message for request, and malloc response */
-  char response[4096];
+  /* make http(s) message, request and store response in responsedest */
 
   /* variables from sys/socket.h, netinet/in.h, and netdb.h */
   struct hostent* server;
@@ -307,14 +299,14 @@ char* makerequest(parsedurl* urldetails, flags* argflags, char* message) {
   }
 
   /* receive response */
-  memset( response, 0, sizeof(response) );
-  total = sizeof( response ) - 1;
+  memset( responsedest, 0, RESPONSE_SIZE );
+  total = RESPONSE_SIZE - 1;
   int received = 0;
   
   while (received <= total) {
-      bytes = read(sockres, response+received, total-received);
+      bytes = read(sockres, responsedest+received, total-received);
       if (bytes < 0) {
-	errx(1, "error reading response");
+	errx(1, "error reading responsedest");
       }
       
       if (bytes == 0) {
@@ -334,6 +326,5 @@ char* makerequest(parsedurl* urldetails, flags* argflags, char* message) {
   /* close the socket */
   close(sockres);
 
-  char* responseptr = response;
-  return responseptr;
+  return 0;
 }
