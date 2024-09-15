@@ -1,7 +1,7 @@
 
 # My Coding Challenges
 
-This is a place for me to store my attempts and solutions to John Crickett's Coding Challenges
+This is a repo for me to store my solutions to John Crickett's Coding Challenges
 
 These are found at https://codingchallenges.fyi/challenges/
 
@@ -13,7 +13,7 @@ Each coding challenge folder has it's own Makefile and automated testing script
 The automated tests are based on each coding challenge's "steps"
 
 ### Automated tests
-Run ```chmod +x test.sh``` and then ```./test.sh``` to run the automated tests
+Simply run ```./test.sh``` to run the automated tests, or edit the script to run your own
 
 ### User tests
 Some coding challenges are basically a command line tool, this means user tests can be run too
