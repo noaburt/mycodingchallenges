@@ -18,10 +18,11 @@ This is the functions file for this coding challenge
 
 int parseargs(int argc, char** argv, flags* argflags) {
 
-  /* parse arguments into flag structure (already allocated space) */
+  /* parse arguments into flag structure */
 
   resetflags(argflags);
-  
+
+  /* init url as not found, init url index as 1, since index 0 (argv[0]) is always source */
   int found = 0;
   int index = 1;
 
@@ -63,6 +64,7 @@ int parseargs(int argc, char** argv, flags* argflags) {
 char* gethelp() {
 
   /* show usage for cccurl */
+  
   char* help = "Usage: cccurl [options...] <url>\n"
   " -v, --vebose\t\t\tMake the operation more talkative\n"
   " -X, --request <method>\t\tSpecify request method to use\n"
@@ -77,7 +79,7 @@ char* gethelp() {
 
 int resetflags(flags* argflags) {
 
-  /* initialise argflags and reset values */
+  /* initialise flag strings and reset values */
 
   argflags->help = 0;
   argflags->verbose = 0;
@@ -120,11 +122,9 @@ parsedurl* parseURL(char* fullurl) {
   case 'p': parsed->protocol = HTTP; break;
   default: errx(1, "no protocol identified"); break;
   }
-
   
   /* skip '://' and get host name and port */
   urlptr += 3;
-
   
   /* read host until '/' is reached, store host */
   parsed->host = malloc( sizeof( char* ) );
@@ -157,7 +157,6 @@ parsedurl* parseURL(char* fullurl) {
   }
 
   *portptr = '\0';
-
   
   /* convert port to long and store */
   /* if port is not specified, set to default for selected protocol */
@@ -166,7 +165,6 @@ parsedurl* parseURL(char* fullurl) {
   } else {
     parsed->port = strtol( portstr, '\0', 10 );
   }
-  
   
   /* store the rest of the url as path*/
   parsed->path = malloc( sizeof( char* ) );
@@ -219,6 +217,8 @@ int makemessage(char* message, parsedurl* urldetails, char* request, char* posth
   char thisheader[64];
   char thispayload[64];
 
+  if ( !urldetails ) { return 1; }
+
   /* detault method is GET */
   if ( request == NULL ) {
     strcpy(thisrequest, "GET");
@@ -226,19 +226,20 @@ int makemessage(char* message, parsedurl* urldetails, char* request, char* posth
     strcpy(thisrequest, request);
   }
 
-  /* add extra headers if present */
+  /* add headers and payloads if present, ignore if missing one */
   if ( postheader == NULL || payload == NULL ) {
     strcpy(thisheader, "");
     strcpy(thispayload, "");
   } else {
     strcpy(thisheader, makecontentlength( strlen(payload)) );
-    strcat(thisheader, postheader);
+    strcat(thisheader, postheader);    
     strcat(thisheader, "\r\n");
 
     strcpy(thispayload, payload);
     strcat(thispayload, "\r\n");
   }
 
+  /* format as message to send */
   char msgformat[128] = "%s %s %s/1.1\r\nHost: %s\r\nAccept: */*\r\n%sConnection: close\r\n\r\n%s";
   
   sprintf(message, msgformat,

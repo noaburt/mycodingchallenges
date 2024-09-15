@@ -14,6 +14,7 @@ Development Notes:
     - NOTE... the following commands cannot be tested in the test.sh, due to the length of the command:
 
  ./cccurl -X POST http://eu.httpbin.org/post -d '{"key": "value"}' -H "Content-Type: application/json"
+ ./cccurl -X PUT http://eu.httpbin.org/put -d '{"key": "value"}' -H "Content-Type: application/json"
  
     - Curl clone that can connect to a server and send GET, DELETE, POST, and PUT HTTP methods
     - Refer to RFC that defines HTTP, focus on HTTP 1.1
@@ -24,9 +25,8 @@ Development Notes:
 
 #include <main.h>
 
-int main(int argc, char** argv) {
 
-  /* good luck */
+int main(int argc, char** argv) {
 
   /* argument validation */
   int urlindex = 0;
@@ -46,7 +46,11 @@ int main(int argc, char** argv) {
   /* parse url input and display request message if verbose */
   parsedurl* urldetails = parseURL( argv[urlindex] );
   char message[ MESSAGE_SIZE ];
-  makemessage( message, urldetails, argflags->methodstr, argflags->customhstr, argflags->datastr);
+  int msgresult = makemessage( message, urldetails, argflags->methodstr, argflags->customhstr, argflags->datastr);
+
+  if ( msgresult == 1 ) {
+    errx(1, "url details NULL before intended");
+  }
 
   if ( argflags->verbose ) {
     char* msgptr = message;
@@ -68,7 +72,7 @@ int main(int argc, char** argv) {
   char response[ RESPONSE_SIZE ];
   makerequest( response, urldetails, argflags, message );
 
-  /* show response, only display headers unless verbose */
+  /* show response, only display headers, if verbose show all */
   int headerstarted = 0;
   char* responseptr = response;
 
@@ -91,7 +95,12 @@ int main(int argc, char** argv) {
     responseptr++;
   }
 
-  freeurl(urldetails);
+  /* free malloced space */
+
+  if ( freeurl(urldetails) == 1 ) {
+    errx(1, "url details NULL before intended");
+  }
+  
   free(argflags);
   
   return 0;

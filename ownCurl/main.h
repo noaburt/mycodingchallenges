@@ -10,6 +10,7 @@ This is the header file for this coding challenge
 
 */
 
+
 /* includes & statics */
 
 #include <stdio.h>
@@ -17,13 +18,14 @@ This is the header file for this coding challenge
 #include <string.h>
 #include <unistd.h>
 #include <err.h>
-#include <sys/socket.h> /* for: socket, connect */
-#include <netinet/in.h> /* for: struct sockaddr_in, struct sockaddr */
-#include <netdb.h> /* for: struct hostent, gethostname */
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
 
-static size_t RESPONSE_SIZE = 4096;
-static size_t MESSAGE_SIZE = 1024;
-static long D_PORT[2] = {80, 443};
+const static size_t RESPONSE_SIZE = 4096;
+const static size_t MESSAGE_SIZE = 1024;
+const static long D_PORT[2] = {80, 443};
+
 
 /* structs */
 
@@ -31,13 +33,13 @@ typedef struct FLAGS {
 
   /* struct to store flags enabled / disabled */
 
-  int help;
-  int verbose;
-  int method;
-  int data;
-  int customh;
+  short int help;
+  short int verbose;
+  short int method;
+  short int data;
+  short int customh;
 
-  /* string to store extra data for methods */
+  /* strings to store extra data for methods */
   char* methodstr;
   char* datastr;
   char* customhstr;
