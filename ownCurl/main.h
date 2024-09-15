@@ -64,7 +64,6 @@ typedef struct PARSEDURL {
 int parseargs(int argc, char** argv, flags* argflags);
 char* gethelp();
 int resetflags(flags* argflags);
-int freeflags(flags* argflags);
 
 /* url */
 parsedurl* parseURL(char* fullurl);

@@ -91,8 +91,8 @@ int main(int argc, char** argv) {
     responseptr++;
   }
 
-  //freeurl(urldetails);
-  //freeflags(argflags);
+  freeurl(urldetails);
+  free(argflags);
   
   return 0;
 }

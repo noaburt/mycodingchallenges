@@ -95,18 +95,6 @@ int resetflags(flags* argflags) {
   return 0;
 }
 
-int freeflags(flags* argflags) {
-
-  /* free space allocated from argflags */
-
-  free(argflags->methodstr);
-  free(argflags->datastr);
-  free(argflags->customhstr);
-  free(argflags);
-
-  return 0;
-}
-
 
 /* url */
 
@@ -241,6 +229,7 @@ int makemessage(char* message, parsedurl* urldetails, char* request, char* posth
   /* add extra headers if present */
   if ( postheader == NULL || payload == NULL ) {
     strcpy(thisheader, "");
+    strcpy(thispayload, "");
   } else {
     strcpy(thisheader, makecontentlength( strlen(payload)) );
     strcat(thisheader, postheader);
