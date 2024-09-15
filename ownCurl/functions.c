@@ -10,9 +10,8 @@ This is the functions file for this coding challenge
 
 */
 
-#include <main.h>
 
-const long D_PORT[2] = {80, 443};
+#include <main.h>
 
 
 /* flags & args */
@@ -124,10 +123,8 @@ parsedurl* parseURL(char* fullurl) {
 
   parsedurl* parsed = malloc( sizeof( parsedurl* ) );
 
-  
   /* find end of protocol */
   while ( *urlptr != ':' ) { urlptr++; }
-
   
   /* assign protocol bassed on http(s) or htt(p) */
   switch( (char) *(urlptr - 1) ) {  
@@ -230,12 +227,13 @@ int makemessage(char* message, char* request, parsedurl* urldetails, char* posth
 
   /* add extra headers if present */
   if ( postheader == NULL ) {
-    strcpy(thisheader, "\r\n");
+    strcpy(thisheader, "");
   } else {
     strcpy(thisheader, postheader);
+    strcat(thisheader, "\r\n");
   }
 
-  char msgformat[128] = "%s %s %s/1.1\r\nHost: %s\r\nAccept: */*%sConnection: close\r\n\r\n";
+  char msgformat[128] = "%s %s %s/1.1\r\nHost: %s\r\nAccept: */*\r\n%sConnection: close\r\n\r\n";
   
   sprintf(message, msgformat,
 	  thisrequest,

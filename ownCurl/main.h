@@ -10,7 +10,7 @@ This is the header file for this coding challenge
 
 */
 
-/* includes & defines */
+/* includes & statics */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,6 +23,7 @@ This is the header file for this coding challenge
 
 static size_t RESPONSE_SIZE = 4096;
 static size_t MESSAGE_SIZE = 1024;
+static long D_PORT[2] = {80, 443};
 
 /* structs */
 
