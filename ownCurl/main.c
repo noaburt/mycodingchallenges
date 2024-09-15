@@ -11,10 +11,14 @@ found at - https://codingchallenges.fyi/challenges/challenge-curl
 
 Development Notes:
 
+    - NOTE... the following commands cannot be tested in the test.sh, due to the length of the command:
+
+ ./cccurl -X POST http://eu.httpbin.org/post -d '{"key": "value"}' -H "Content-Type: application/json"
+ 
     - Curl clone that can connect to a server and send GET, DELETE, POST, and PUT HTTP methods
-    - Refer to RFC that defines HTTP, focus on HTTP 1.1 defined in https://datatracker.ietf.org/doc/html/rfc9110
+    - Refer to RFC that defines HTTP, focus on HTTP 1.1
     - Connection will close after every HTTP request (Connection: close)
-    - Response is assumed short, space for 4096 chars
+    - Response is assumed short, space for 4096 chars, defined in main.h
 
 */
 
@@ -42,7 +46,7 @@ int main(int argc, char** argv) {
   /* parse url input and display request message if verbose */
   parsedurl* urldetails = parseURL( argv[urlindex] );
   char message[ MESSAGE_SIZE ];
-  makemessage( message, argflags->methodstr, urldetails, argflags->customhstr);
+  makemessage( message, urldetails, argflags->methodstr, argflags->customhstr, argflags->datastr);
 
   if ( argflags->verbose ) {
     char* msgptr = message;

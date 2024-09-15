@@ -211,12 +211,25 @@ int freeurl(parsedurl* parsed) {
 
 /* request */
 
-int makemessage(char* message, char* request, parsedurl* urldetails, char* postheader) {
+char* makecontentlength(size_t length) {
+
+  /* return string formatting the payload length */
+
+  char format[64] = "Content-Length: %zu\r\n";
+
+  sprintf(format, format, length);
+
+  char* formattedlength = format;
+  return formattedlength;
+}
+
+int makemessage(char* message, parsedurl* urldetails, char* request, char* postheader, char* payload) {
 
   /* return a request message based on parsed url */
 
   char thisrequest[64];
   char thisheader[64];
+  char thispayload[64];
 
   /* detault method is GET */
   if ( request == NULL ) {
@@ -226,21 +239,26 @@ int makemessage(char* message, char* request, parsedurl* urldetails, char* posth
   }
 
   /* add extra headers if present */
-  if ( postheader == NULL ) {
+  if ( postheader == NULL || payload == NULL ) {
     strcpy(thisheader, "");
   } else {
-    strcpy(thisheader, postheader);
+    strcpy(thisheader, makecontentlength( strlen(payload)) );
+    strcat(thisheader, postheader);
     strcat(thisheader, "\r\n");
+
+    strcpy(thispayload, payload);
+    strcat(thispayload, "\r\n");
   }
 
-  char msgformat[128] = "%s %s %s/1.1\r\nHost: %s\r\nAccept: */*\r\n%sConnection: close\r\n\r\n";
+  char msgformat[128] = "%s %s %s/1.1\r\nHost: %s\r\nAccept: */*\r\n%sConnection: close\r\n\r\n%s";
   
   sprintf(message, msgformat,
 	  thisrequest,
 	  urldetails->path,
 	  urldetails->protocol ? "HTTPS" : "HTTP",
 	  urldetails->host,
-	  thisheader
+	  thisheader,
+	  thispayload
 	  );
   
   return 0;
@@ -313,8 +331,6 @@ int makerequest(char* responsedest, parsedurl* urldetails, flags* argflags, char
       
       received+=bytes;
   }
-
-  //free(message);
 
   /* check if response string is full*/
   if (received == total) {

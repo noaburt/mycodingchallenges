@@ -33,4 +33,4 @@ echo "Beginning testing..."
 runtest "http://eu.httpbin.org/get" "Header contents only"
 runtest "-v http://eu.httpbin.org/get" "Connection & header contents"
 runtest "-X DELETE http://eu.httpbin.org/delete" "args, data, etc should be empty"
-runtest "-X POST http://eu.httpbin.org/post"
+

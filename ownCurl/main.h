@@ -71,6 +71,7 @@ parsedurl* parseURL(char* fullurl);
 int freeurl(parsedurl* parsed);
 
 /* request */
+char* makecontentlength(size_t length);
 int showmsg(char direction, char* message);
-int makemessage(char* message, char* request, parsedurl* urldetails, char* postheader);
+int makemessage(char* message, parsedurl* urldetails, char* request, char* postheader, char* payload);
 int makerequest(char* responsedest, parsedurl* urldetails, flags* argflags, char* message);
