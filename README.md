@@ -18,6 +18,8 @@ Run ```chmod +x test.sh``` and then ```./test.sh``` to run the automated tests
 ### User tests
 Some coding challenges are basically a command line tool, this means user tests can be run too
 
-Run ```make``` in the chosen challenge folder and interact with ```./main``` as with any other CLI tool
+Run ```make``` in the chosen challenge folder, for example 'cccurl', the 'Build Your Own curl' challenge
 
-(run ```./main --help``` if you are unsure)
+Interact with the compiled binary, in this example ```./cccurl```, as with any other CLI tool
+
+Every challenge that allows for user interaction will support ```--help / -h```
