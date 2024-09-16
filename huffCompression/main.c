@@ -27,9 +27,23 @@ int main(int argc, char** argv) {
     return 0;
   }
 
-  printf("-- %d\n", parsedflags->fileindex);
+  /* file validation */
+  FILE* fileptr = fopen( *(argv+parsedflags->fileindex), "r" );
 
+  if ( !fileptr ) {
+    errx(1, "cannot read '%s': No such file or directory", *(argv+parsedflags->fileindex));
+  }
+
+  /* count characters in file */
+  charcount* listhead = malloc( sizeof( charcount* ) );
+  addchar(listhead, 'a');
+  printf("list: %c, %c\n", listhead->character, listhead->next->character);
+  addchar(listhead, 'b');
+  printf("list: %c, %c\n", listhead->character, listhead->next->character);
+
+  /* free structs and exit */
   if ( freeflags(parsedflags) > 0 ) { errx(1, "flag pointer null before intended"); }
+  if ( freecount(listhead) > 0 ) { errx(1, "char count pointer null before intended"); }
 
   return 0;
 }

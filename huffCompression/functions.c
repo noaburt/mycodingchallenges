@@ -77,3 +77,42 @@ char* gethelp() {
 
   return helpstr;
 }
+
+
+/* counting chars */
+
+int addchar(charcount* head, char newchar) {
+
+  /* add new char to end of linked list */
+
+  charcount* headptr = head;
+
+  /* find end of list */
+  while( headptr->character ) {
+    headptr = headptr->next;
+  }
+
+  headptr->character = newchar;
+  headptr->count = 0;
+  headptr->next = malloc( sizeof( charcount* ) );
+
+  return 0;
+}
+
+int freecount(charcount* head) {
+
+  /* free all counts in linked list */
+
+  if ( !head ) { return 1; }
+
+  charcount* currentcount = head;
+  charcount* prevcount;
+
+  while( currentcount->next ) {
+    prevcount = currentcount;
+    currentcount = currentcount->next;
+    free(prevcount);
+  }
+
+  return 0;
+}
