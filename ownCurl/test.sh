@@ -14,7 +14,7 @@ This is the file to run all tests required of this coding challenge
 
 function runtest {
 
-    # Simple function to format tests; arg 1 is test arguments, arg 2 is expected result, arg 3 is show tests [0 - no, 1 - yes]
+    # Simple function to format tests; arg 1 is test arguments, arg 2 is expected result
 
     printf "\n ./cccurl %-70s | expecting: %40s\n" "$1" "$2"
     printf "I=================================================================="
