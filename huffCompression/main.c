@@ -17,8 +17,20 @@ Development Notes:
 
 int main(int argc, char** argv) {
 
-    /* good luck */
+  /* good luck */
 
+  /* parse flags and show help */
+  flagstruct* parsedflags = parseflags(argc, argv);
+
+  if ( parsedflags->help ) {
+    printf("%s\n", gethelp());
     return 0;
+  }
+
+  printf("-- %d\n", parsedflags->fileindex);
+
+  if ( freeflags(parsedflags) > 0 ) { errx(1, "flag pointer null before intended"); }
+
+  return 0;
 }
 
