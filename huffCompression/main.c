@@ -41,7 +41,8 @@ int main(int argc, char** argv) {
   addchar(listhead, 'b');
   printf("list: %c, %c\n", listhead->character, listhead->next->character);
 
-  /* free structs and exit */
+  /* free structs, close file, and exit */
+  fclose(fileptr);
   if ( freeflags(parsedflags) > 0 ) { errx(1, "flag pointer null before intended"); }
   if ( freecount(listhead) > 0 ) { errx(1, "char count pointer null before intended"); }
 
