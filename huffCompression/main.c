@@ -35,10 +35,10 @@ int main(int argc, char** argv) {
   }
 
   /* count characters in file */
-  charcount* listhead = malloc( sizeof( charcount* ) );
-
+  charcount* listhead = malloc( sizeof( charcount ) );
   countfile(fileptr, listhead);
 
+  // TEMP
   charcount* countptr = listhead;
   
   while( countptr->character ) {
@@ -47,12 +47,17 @@ int main(int argc, char** argv) {
     
     countptr = countptr->next;
   }
+  //TEMP
+
+  /* make binary tree */
+  charcount* sortedcounts = sortcounts(listhead);
+  
 
   /* free structs, close file, and exit */
   fclose(fileptr);
   
   if ( freeflags(parsedflags) > 0 ) { errx(1, "flag pointer null before intended"); }
-  if ( freecount(listhead) > 0 ) { errx(1, "char count pointer null before intended"); }
+  if ( freecount(sortedcounts) > 0 ) { errx(1, "char count pointer null before intended"); }
 
   return 0;
 }

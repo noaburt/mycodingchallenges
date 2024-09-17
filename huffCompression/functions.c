@@ -88,13 +88,13 @@ int addchar(charcount* head, char newchar) {
   charcount* headptr = head;
 
   /* find end of list */
-  while( headptr->character ) {
+  while( headptr->next ) {
     headptr = headptr->next;
   }
 
   headptr->character = newchar;
   headptr->count = 1;
-  headptr->next = malloc( sizeof( charcount* ) );
+  headptr->next = malloc( sizeof( charcount ) );
 
   return 0;
 }
@@ -106,7 +106,7 @@ int countchar(charcount* head, char tocount) {
   charcount* countptr = head;
 
   /* find character to count */
-  while( countptr->character ) {
+  while( countptr->next ) {
     
     if (countptr->character == tocount) {
       countptr->count++;
@@ -153,4 +153,17 @@ int freecount(charcount* head) {
   }
 
   return 0;
+}
+
+
+/* binary tree */
+
+charcount* sortcounts(charcount* unsorted) {
+
+  /* return a sorted linked list of character counts for use in binary tree */
+
+  charcount* unsortedptr = unsorted;
+
+  return unsortedptr;
+  
 }

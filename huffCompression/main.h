@@ -52,3 +52,6 @@ char* gethelp();
 int addchar(charcount* head, char newchar);
 int countfile(FILE* fileptr, charcount* listhead);
 int freecount(charcount* head);
+
+/* binary tree */
+charcount* sortcounts(charcount* unsorted);
