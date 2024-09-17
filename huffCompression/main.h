@@ -55,3 +55,5 @@ int freecount(charcount* head);
 
 /* binary tree */
 charcount* sortcounts(charcount* unsorted);
+charcount* mergesplit(charcount* head);
+charcount* merge(charcount* firsthalf, charcount* secondhalf);

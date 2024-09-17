@@ -162,8 +162,6 @@ charcount* sortcounts(charcount* unsorted) {
 
   /* return a sorted linked list of character counts for use in binary tree */
 
-  charcount* unsortedptr = unsorted;
-
-  return unsortedptr;
+  return NULL;
   
 }
