@@ -35,7 +35,7 @@ typedef struct CHARCOUNT {
   struct CHARCOUNT* next;
 
   char character;
-  int count;
+  long int count;
   
 } charcount;
 

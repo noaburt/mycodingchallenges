@@ -109,7 +109,6 @@ int countchar(charcount* head, char tocount) {
   while( countptr->character ) {
     
     if (countptr->character == tocount) {
-      printf("COUNT IS %d\n", countptr->count);
       countptr->count++;
       return 0;
     }
@@ -119,7 +118,6 @@ int countchar(charcount* head, char tocount) {
 
   /* character hasn't been found, add new character */
   addchar(countptr, tocount);
-  printf("NEW COUNT\n");
 
   return 0;
 }
@@ -132,10 +130,7 @@ int countfile(FILE* fileptr, charcount* listhead) {
 
   while(1) {
     currentchar = fgetc(fileptr);
-
     if (currentchar == EOF) { break; }
-
-    printf("-%c: ", currentchar);
     countchar(listhead, currentchar);
   }
 

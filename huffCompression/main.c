@@ -39,6 +39,15 @@ int main(int argc, char** argv) {
 
   countfile(fileptr, listhead);
 
+  charcount* countptr = listhead;
+  
+  while( countptr->character ) {
+    
+    printf("%c: %ld\n", countptr->character, countptr->count);
+    
+    countptr = countptr->next;
+  }
+
   /* free structs, close file, and exit */
   fclose(fileptr);
   
