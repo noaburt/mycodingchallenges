@@ -50,4 +50,5 @@ char* gethelp();
 
 /* counting chars */
 int addchar(charcount* head, char newchar);
+int countfile(FILE* fileptr, charcount* listhead);
 int freecount(charcount* head);

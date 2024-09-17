@@ -93,8 +93,51 @@ int addchar(charcount* head, char newchar) {
   }
 
   headptr->character = newchar;
-  headptr->count = 0;
+  headptr->count = 1;
   headptr->next = malloc( sizeof( charcount* ) );
+
+  return 0;
+}
+
+int countchar(charcount* head, char tocount) {
+
+  /* increase the character count of 'tocount' by one */
+
+  charcount* countptr = head;
+
+  /* find character to count */
+  while( countptr->character ) {
+    
+    if (countptr->character == tocount) {
+      printf("COUNT IS %d\n", countptr->count);
+      countptr->count++;
+      return 0;
+    }
+    
+    countptr = countptr->next;
+  }
+
+  /* character hasn't been found, add new character */
+  addchar(countptr, tocount);
+  printf("NEW COUNT\n");
+
+  return 0;
+}
+
+int countfile(FILE* fileptr, charcount* listhead) {
+
+  /* count the occurences of each character in a file, and store in linked list */
+
+  char currentchar;
+
+  while(1) {
+    currentchar = fgetc(fileptr);
+
+    if (currentchar == EOF) { break; }
+
+    printf("-%c: ", currentchar);
+    countchar(listhead, currentchar);
+  }
 
   return 0;
 }

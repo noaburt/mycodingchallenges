@@ -36,13 +36,12 @@ int main(int argc, char** argv) {
 
   /* count characters in file */
   charcount* listhead = malloc( sizeof( charcount* ) );
-  addchar(listhead, 'a');
-  printf("list: %c, %c\n", listhead->character, listhead->next->character);
-  addchar(listhead, 'b');
-  printf("list: %c, %c\n", listhead->character, listhead->next->character);
+
+  countfile(fileptr, listhead);
 
   /* free structs, close file, and exit */
   fclose(fileptr);
+  
   if ( freeflags(parsedflags) > 0 ) { errx(1, "flag pointer null before intended"); }
   if ( freecount(listhead) > 0 ) { errx(1, "char count pointer null before intended"); }
 
